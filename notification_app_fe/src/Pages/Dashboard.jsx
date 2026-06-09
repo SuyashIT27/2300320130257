@@ -1,72 +1,86 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import NotificationList from "../components/NotificationList";
+
+const API_URL = "http://4.224.186.213/evaluation-service/notifications";
 
 function Dashboard() {
   const [notifications, setNotifications] = useState([]);
   const [filter, setFilter] = useState("all");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const TOKEN = "PASTE_YOUR_ACCESS_TOKEN_HERE";
+  const ACCESS_TOKEN = import.meta.env.VITE_ACCESS_TOKEN;
 
   useEffect(() => {
-    fetchNotifications();
-  }, []);
+    const fetchNotifications = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-  async function fetchNotifications() {
-    try {
-      setLoading(true);
-
-      const response = await fetch(
-        "http://4.224.186.213/evaluation-service/notifications",
-        {
+        const response = await fetch(API_URL, {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${TOKEN}`,
+            Authorization: `Bearer ${ACCESS_TOKEN}`,
           },
-        },
-      );
+        });
 
-      const data = await response.json();
-      setNotifications(data.notifications || []);
-    } catch (error) {
-      console.log("Error fetching notifications:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
+        const data = await response.json();
 
-  const topNotifications = [...notifications]
-    .sort((a, b) => new Date(b.Timestamp) - new Date(a.Timestamp))
-    .slice(0, 10);
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to fetch notifications");
+        }
 
-  const filteredNotifications = topNotifications.filter((item) => {
-    if (filter === "all") return true;
-    return item.Type?.toLowerCase() === filter;
-  });
+        setNotifications(data.notifications || []);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, [ACCESS_TOKEN]);
+  console.log(import.meta.env.VITE_ACCESS_TOKEN);
+  const filteredNotifications = useMemo(() => {
+    return [...notifications]
+      .sort((a, b) => new Date(b.Timestamp) - new Date(a.Timestamp))
+      .slice(0, 10)
+      .filter((item) => {
+        if (filter === "all") return true;
+        return item.Type?.toLowerCase() === filter;
+      });
+  }, [notifications, filter]);
 
   return (
-    <div className="dashboard">
-      <div className="hero">
+    <main className="dashboard">
+      <section className="hero">
         <h1>Campus Notifications</h1>
         <p>
-          Stay updated with important campus alerts, results, events and
-          placements.
+          A clean notification dashboard showing the latest campus updates,
+          results, events and placement alerts.
         </p>
-      </div>
+      </section>
 
-      <div className="filter-box">
-        <button onClick={() => setFilter("all")}>All</button>
-        <button onClick={() => setFilter("result")}>Result</button>
-        <button onClick={() => setFilter("event")}>Event</button>
-        <button onClick={() => setFilter("placement")}>Placement</button>
-      </div>
+      <section className="filter-box">
+        {["all", "result", "event", "placement"].map((type) => (
+          <button
+            key={type}
+            onClick={() => setFilter(type)}
+            className={filter === type ? "active-filter" : ""}
+          >
+            {type.charAt(0).toUpperCase() + type.slice(1)}
+          </button>
+        ))}
+      </section>
 
-      {loading ? (
-        <h2 className="loading">Loading notifications...</h2>
-      ) : (
+      {loading && <h2 className="loading">Loading notifications...</h2>}
+
+      {error && <h2 className="empty">{error}</h2>}
+
+      {!loading && !error && (
         <NotificationList notifications={filteredNotifications} />
       )}
-    </div>
+    </main>
   );
 }
 
