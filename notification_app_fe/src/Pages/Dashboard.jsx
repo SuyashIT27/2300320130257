@@ -12,35 +12,43 @@ function Dashboard() {
   const ACCESS_TOKEN = import.meta.env.VITE_ACCESS_TOKEN;
 
   useEffect(() => {
-    const fetchNotifications = async () => {
+    async function fetchNotifications() {
       try {
         setLoading(true);
         setError("");
 
+        if (!ACCESS_TOKEN) {
+          throw new Error("Access token is missing. Check your .env file.");
+        }
+
         const response = await fetch(API_URL, {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${ACCESS_TOKEN}`,
+            Authorization: `Bearer ${ACCESS_TOKEN.trim()}`,
+            "Content-Type": "application/json",
           },
         });
 
-        const data = await response.json();
+        const text = await response.text();
+        console.log("Status:", response.status);
+        console.log("Response:", text);
 
         if (!response.ok) {
-          throw new Error(data.message || "Failed to fetch notifications");
+          throw new Error(text || "Failed to fetch notifications");
         }
 
+        const data = JSON.parse(text);
         setNotifications(data.notifications || []);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchNotifications();
   }, [ACCESS_TOKEN]);
-  console.log(import.meta.env.VITE_ACCESS_TOKEN);
+
   const filteredNotifications = useMemo(() => {
     return [...notifications]
       .sort((a, b) => new Date(b.Timestamp) - new Date(a.Timestamp))
