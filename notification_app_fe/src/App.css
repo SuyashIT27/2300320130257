@@ -124,3 +124,41 @@ body {
   margin-top: 40px;
   color: #6b7280;
 }
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.limit-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.limit-box select {
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  align-items: center;
+}
+
+.pagination button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
