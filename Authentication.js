@@ -30,3 +30,6 @@ async function getAuthToken() {
 }
 
 getAuthToken();
+git add .
+git commit -m "Merge remote repository"
+git push -u origin main
