@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #f4f7fb;
+  color: #1f2937;
+}
+
+.dashboard {
+  min-height: 100vh;
+  padding: 40px 8%;
+}
+
+.hero {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  padding: 35px;
+  border-radius: 22px;
+  margin-bottom: 25px;
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.25);
+}
+
+.hero h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 17px;
+  opacity: 0.9;
+}
+
+.filter-box {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+.filter-box button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background: white;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.filter-box button:hover {
+  background: #2563eb;
+  color: white;
+}
+
+.notification-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.notification-card {
+  background: white;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+  transition: 0.3s;
+}
+
+.notification-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  color: white;
+}
+
+.result {
+  background: #16a34a;
+}
+
+.event {
+  background: #9333ea;
+}
+
+.placement {
+  background: #ea580c;
+}
+
+.time {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.notification-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.notification-card p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  margin-top: 40px;
+  color: #6b7280;
+}
